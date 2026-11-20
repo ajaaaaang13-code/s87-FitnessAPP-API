@@ -251,14 +251,41 @@ a {
 }
 
 .workout-card {
-  display: flex;
-  min-height: 76px;
-  align-items: center;
-  gap: 14px;
-  padding: 13px 17px;
+  padding: 14px 16px;
   border: 1px solid #e3e9e1;
   border-radius: 8px;
   background: white;
+}
+
+.workout-main {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  gap: 12px;
+}
+
+.workout-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 4px;
+}
+
+.edit-workout-form {
+  display: grid;
+  gap: 14px;
+}
+
+.edit-workout-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
 .workout-avatar {
@@ -443,6 +470,24 @@ a {
 
   .status-pill {
     min-width: auto;
+  }
+
+  .workout-main {
+    flex-wrap: wrap;
+  }
+
+  .workout-details {
+    flex: 1 1 calc(100% - 60px);
+  }
+
+  .workout-actions {
+    width: 100%;
+    justify-content: flex-end;
+    margin-left: 0;
+  }
+
+  .edit-workout-fields {
+    grid-template-columns: 1fr;
   }
 
   .app-footer {

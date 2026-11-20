@@ -4,6 +4,9 @@
     "register": "/users/register",
     "login": "/users/login",
     "addWorkout": "/workouts/addWorkout",
-    "getMyWorkouts": "/workouts/getMyWorkouts"
+    "getMyWorkouts": "/workouts/getMyWorkouts",
+    "updateWorkout": "/workouts/updateWorkout/:id",
+    "deleteWorkout": "/workouts/deleteWorkout/:id",
+    "completeWorkoutStatus": "/workouts/completeWorkoutStatus/:id"
   }
 }

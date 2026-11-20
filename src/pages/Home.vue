@@ -38,6 +38,10 @@
         v-for="(workout, index) in workouts"
         :key="workout._id || workout.id || `${workout.name}-${index}`"
         :workout="workout"
+        :is-busy="isMutating"
+        @update="updateWorkout"
+        @delete="deleteWorkout"
+        @complete="completeWorkout"
       />
     </section>
     <section v-else class="empty-state">
@@ -60,6 +64,7 @@ const user = useGlobalStore()
 const workouts = ref([])
 const error = ref('')
 const isLoading = ref(false)
+const isMutating = ref(false)
 
 const totalMinutes = computed(() =>
   workouts.value.reduce((sum, workout) => sum + (Number(workout.duration) || 0), 0),
@@ -88,6 +93,83 @@ async function fetchWorkouts() {
     }
   } finally {
     isLoading.value = false
+  }
+}
+
+function getWorkoutPath(endpoint, id) {
+  return endpoint.replace(':id', encodeURIComponent(id))
+}
+
+function updateWorkoutInList(id, updatedWorkout) {
+  const index = workouts.value.findIndex(
+    (workout) => String(workout._id || workout.id) === String(id),
+  )
+
+  if (index >= 0) {
+    workouts.value[index] = updatedWorkout
+  }
+}
+
+function handleMutationError(requestError, fallback) {
+  error.value = getApiError(requestError, fallback)
+  if (requestError.response?.status === 401 || requestError.response?.status === 403) {
+    user.clearToken()
+    router.push('/login')
+  }
+}
+
+async function updateWorkout({ id, updates }) {
+  error.value = ''
+  isMutating.value = true
+
+  try {
+    const response = await api.patch(getWorkoutPath(endpoints.updateWorkout, id), updates)
+    const updatedWorkout = response.data?.workout || response.data
+    if (!updatedWorkout || typeof updatedWorkout !== 'object') {
+      throw new Error('The API returned an invalid workout response.')
+    }
+    updateWorkoutInList(id, updatedWorkout)
+  } catch (requestError) {
+    handleMutationError(requestError, 'Could not update your workout.')
+  } finally {
+    isMutating.value = false
+  }
+}
+
+async function deleteWorkout(id) {
+  error.value = ''
+  isMutating.value = true
+
+  try {
+    await api.delete(getWorkoutPath(endpoints.deleteWorkout, id))
+    workouts.value = workouts.value.filter(
+      (workout) => String(workout._id || workout.id) !== String(id),
+    )
+  } catch (requestError) {
+    handleMutationError(requestError, 'Could not delete your workout.')
+  } finally {
+    isMutating.value = false
+  }
+}
+
+async function completeWorkout(id) {
+  error.value = ''
+  isMutating.value = true
+
+  try {
+    const response = await api.patch(
+      getWorkoutPath(endpoints.completeWorkoutStatus, id),
+      {},
+    )
+    const updatedWorkout = response.data?.workout || response.data
+    if (!updatedWorkout || typeof updatedWorkout !== 'object') {
+      throw new Error('The API returned an invalid workout response.')
+    }
+    updateWorkoutInList(id, updatedWorkout)
+  } catch (requestError) {
+    handleMutationError(requestError, 'Could not complete your workout.')
+  } finally {
+    isMutating.value = false
   }
 }
 
