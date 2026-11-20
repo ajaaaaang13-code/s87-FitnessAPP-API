@@ -1,8 +1,9 @@
 {
   "url": "https://s85-fitnesstracker.onrender.com",
   "endpoints": {
-    "register": "/register",
-    "login": "/login",
-    "workouts": "/workouts"
+    "register": "/users/register",
+    "login": "/users/login",
+    "addWorkout": "/workouts/addWorkout",
+    "getMyWorkouts": "/workouts/getMyWorkouts"
   }
 }

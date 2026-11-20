@@ -31,13 +31,6 @@
           <span class="input-group-text">minutes</span>
         </div>
       </div>
-      <div class="form-field">
-        <label for="workout-status">Status</label>
-        <select id="workout-status" v-model="form.status" class="form-select" required>
-          <option value="completed">Completed</option>
-          <option value="in-progress">In progress</option>
-        </select>
-      </div>
     </div>
 
     <p v-if="error" class="alert alert-danger" role="alert">{{ error }}</p>
@@ -56,7 +49,7 @@ import { RouterLink, useRouter } from 'vue-router'
 import api, { endpoints, getApiError } from '@/api'
 
 const router = useRouter()
-const form = ref({ name: '', duration: null, status: 'completed' })
+const form = ref({ name: '', duration: null })
 const error = ref('')
 const isLoading = ref(false)
 
@@ -65,11 +58,9 @@ async function addWorkout() {
   isLoading.value = true
 
   try {
-    await api.post(endpoints.workouts, {
+    await api.post(endpoints.addWorkout, {
       name: form.value.name,
       duration: Number(form.value.duration),
-      dateAdded: new Date().toISOString(),
-      status: form.value.status,
     })
     await router.push({ name: 'Workouts' })
   } catch (requestError) {

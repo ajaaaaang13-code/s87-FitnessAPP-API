@@ -2,7 +2,7 @@ import axios from 'axios'
 import clientConfig from '../fitnessAppClient.json'
 
 const api = axios.create({
-  baseURL: clientConfig.url,
+  baseURL: import.meta.env.DEV ? '' : clientConfig.url,
 })
 
 api.interceptors.request.use((config) => {

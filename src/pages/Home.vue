@@ -73,7 +73,7 @@ async function fetchWorkouts() {
   isLoading.value = true
 
   try {
-    const response = await api.get(endpoints.workouts)
+    const response = await api.get(endpoints.getMyWorkouts)
     const data = response.data
     const list = Array.isArray(data) ? data : data?.workouts
     if (!Array.isArray(list)) {
