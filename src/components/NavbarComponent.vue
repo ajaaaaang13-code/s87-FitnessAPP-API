@@ -1,6 +1,6 @@
 <template>
   <header class="topbar">
-    <RouterLink class="brand" to="/workouts" aria-label="Stride home">
+    <RouterLink class="brand" to="/" aria-label="Stride home">
       <span class="brand-mark">S</span>
       <span>stride<span class="brand-dot">.</span></span>
     </RouterLink>

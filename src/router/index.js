@@ -2,13 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import AddWorkout from '@/pages/AddWorkout.vue'
 import ErrorPage from '@/pages/Error.vue'
 import Home from '@/pages/Home.vue'
+import Landing from '@/pages/Landing.vue'
 import Login from '@/pages/Login.vue'
 import Logout from '@/pages/Logout.vue'
 import Register from '@/pages/Register.vue'
 import { useGlobalStore } from '@/stores/global'
 
 const routes = [
-  { path: '/', redirect: '/workouts' },
+  { path: '/', name: 'Landing', component: Landing },
   { path: '/register', name: 'Register', component: Register },
   { path: '/login', name: 'Login', component: Login },
   { path: '/workouts', name: 'Workouts', component: Home, meta: { requiresAuth: true } },
