@@ -1,9 +1,9 @@
 <template>
   <main class="auth-page">
     <section class="auth-card">
-      <p class="eyebrow">REEL CATALOG</p>
+      <p class="eyebrow">STRIDE FITNESS</p>
       <h1>Welcome back</h1>
-      <p class="muted">Log in to explore the movie catalog.</p>
+      <p class="muted">Log in to see your personal workout progress.</p>
       <p v-if="route.query.registered" class="alert alert-success" role="status">
         Account created. Log in to continue.
       </p>
@@ -28,12 +28,12 @@
           required
         />
         <p v-if="error" class="alert alert-danger" role="alert">{{ error }}</p>
-        <button class="btn btn-accent w-100" type="submit" :disabled="isLoading">
+        <button class="btn btn-success w-100" type="submit" :disabled="isLoading">
           {{ isLoading ? 'Logging in…' : 'Log in' }}
         </button>
       </form>
 
-      <p class="auth-footer">New to Reel? <RouterLink to="/register">Create an account</RouterLink></p>
+      <p class="auth-footer">New to Stride? <RouterLink to="/register">Create an account</RouterLink></p>
     </section>
   </main>
 </template>
@@ -41,7 +41,7 @@
 <script setup>
 import { ref } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
-import api, { getApiError } from '@/api'
+import api, { endpoints, getApiError } from '@/api'
 import { useGlobalStore } from '@/stores/global'
 
 const route = useRoute()
@@ -56,19 +56,15 @@ async function login() {
   isLoading.value = true
 
   try {
-    const response = await api.post('/users/login', form.value)
+    const response = await api.post(endpoints.login, form.value)
     const token = response.data?.access || response.data?.token || response.data?.accessToken
     if (typeof token !== 'string' || !token) {
       throw new Error('The login response did not contain an access token.')
     }
 
-    const profile = {
-      ...response.data,
-      ...(response.data?.user || response.data?.profile || {}),
-    }
-    user.setSession(token, profile)
-    const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/movies'
-    await router.push(redirect.startsWith('/') && !redirect.startsWith('//') ? redirect : '/movies')
+    user.setToken(token)
+    const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/workouts'
+    await router.push(redirect.startsWith('/') && !redirect.startsWith('//') ? redirect : '/workouts')
   } catch (requestError) {
     error.value = getApiError(requestError, 'Could not log in.')
   } finally {

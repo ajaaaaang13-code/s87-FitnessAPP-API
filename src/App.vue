@@ -2,7 +2,7 @@
   <div class="app-shell">
     <NavbarComponent />
     <RouterView />
-    <footer class="app-footer">REEL CATALOG <span>Stories worth keeping.</span></footer>
+    <footer class="app-footer">STRIDE FITNESS TRACKER <span>Small steps. Strong habits.</span></footer>
   </div>
 </template>
 

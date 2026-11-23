@@ -1,9 +1,9 @@
 <template>
   <main class="auth-page">
     <section class="auth-card">
-      <p class="eyebrow">REEL CATALOG</p>
+      <p class="eyebrow">STRIDE FITNESS</p>
       <h1>Create your account</h1>
-      <p class="muted">Create an account to view movie details.</p>
+      <p class="muted">Register with your email and password to start tracking.</p>
 
       <form class="form-stack" @submit.prevent="register">
         <label for="register-email">Email</label>
@@ -22,19 +22,11 @@
           class="form-control"
           type="password"
           autocomplete="new-password"
-          required
-        />
-        <label for="register-confirm-password">Confirm password</label>
-        <input
-          id="register-confirm-password"
-          v-model="form.confirmPassword"
-          class="form-control"
-          type="password"
-          autocomplete="new-password"
+          minlength="8"
           required
         />
         <p v-if="error" class="alert alert-danger" role="alert">{{ error }}</p>
-        <button class="btn btn-accent w-100" type="submit" :disabled="isLoading">
+        <button class="btn btn-success w-100" type="submit" :disabled="isLoading">
           {{ isLoading ? 'Creating account…' : 'Register' }}
         </button>
       </form>
@@ -47,10 +39,10 @@
 <script setup>
 import { ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
-import api, { getApiError } from '@/api'
+import api, { endpoints, getApiError } from '@/api'
 
 const router = useRouter()
-const form = ref({ email: '', password: '', confirmPassword: '' })
+const form = ref({ email: '', password: '' })
 const error = ref('')
 const isLoading = ref(false)
 
@@ -59,13 +51,7 @@ async function register() {
   isLoading.value = true
 
   try {
-    if (form.value.password !== form.value.confirmPassword) {
-      throw new Error('Passwords do not match.')
-    }
-    await api.post('/users/register', {
-      email: form.value.email,
-      password: form.value.password,
-    })
+    await api.post(endpoints.register, form.value)
     await router.push({ name: 'Login', query: { registered: '1' } })
   } catch (requestError) {
     error.value = getApiError(requestError, 'Could not create your account.')

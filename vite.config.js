@@ -1,7 +1,7 @@
 import { fileURLToPath, URL } from 'node:url'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
-import clientConfig from './movieAppClient.json' with { type: 'json' }
+import clientConfig from './fitnessAppClient.json' with { type: 'json' }
 
 export default defineConfig({
   plugins: [vue()],
@@ -16,7 +16,7 @@ export default defineConfig({
         target: clientConfig.url,
         changeOrigin: true,
       },
-      '/movies': {
+      '/workouts': {
         target: clientConfig.url,
         changeOrigin: true,
       },

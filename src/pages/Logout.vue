@@ -4,7 +4,7 @@
       <p class="eyebrow">SIGNED OUT</p>
       <h1>See you next time.</h1>
       <p class="muted">Your session has ended.</p>
-      <RouterLink to="/login" class="btn btn-accent">Log in again</RouterLink>
+      <RouterLink to="/login" class="btn btn-success">Log in again</RouterLink>
     </section>
   </main>
 </template>
@@ -18,7 +18,7 @@ const router = useRouter()
 const user = useGlobalStore()
 
 onMounted(async () => {
-  user.clearSession()
+  user.clearToken()
   await router.replace({ name: 'Login' })
 })
 </script>
